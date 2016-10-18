@@ -2353,14 +2353,13 @@ _p[21] = {
                 return this.getRoot().minder;
             },
             drawRelationLine: function(){
-                var color = this.getData('color'),that =this;
+                var that =this;
                 var lin = document.getElementById('lineG');
                 if(lin) {
                     lin.remove();
                 }
-                if(["#ff0000" ,"#f00" ,"red"].indexOf(color) == -1) return false;
                 var arr = minder.getAllNode().filter(function(ele){
-                    return ["#ff0000" ,"#f00" ,"red"].indexOf(ele.getData('color')) != -1 && that.getData('id')==ele.getData('id') && that != ele;
+                    return that.getData('stzj') && that.getData('stzj')==ele.getData('stzj') && that != ele;
                 });
                 var lineG = new kity.Group().setId("lineG");
 
@@ -5647,10 +5646,11 @@ _p[49] = {
                 update: function(image, node, box) {
                     var url = node.getData("image");
                     var title = node.getData("imageTitle");
+                    var width = node.getData("imageWidth");
                     // var size = node.getData("imageSize");
                     size = {
-                        width : 20,
-                        height : 20
+                        width : width || 20,
+                        height : width || 20,
                     }
                     
                     var spaceTop = node.getStyle("space-top");
@@ -5667,8 +5667,8 @@ _p[49] = {
             });
             return {
                 defaultOptions: {
-                    maxImageWidth: 20,
-                    maxImageHeight: 20
+                    maxImageWidth: 100,
+                    maxImageHeight: 100
                 },
                 commands: {
                     image: ImageCommand
@@ -6122,7 +6122,7 @@ _p[53] = {
                 update: function(icon, node, box) {
                     var x = box.right + node.getStyle("space-left");
                     var y = box.cy;
-                    icon.path.fill(node.getStyle("color"));
+                    icon.path.fill("#272636");
                     icon.setTranslate(x, -10);
                     return new kity.Box(x, Math.round(y - icon.height / 2), icon.width, icon.height);
                 }
@@ -7218,7 +7218,12 @@ _p[60] = {
         var TextRenderer = kity.createClass("TextRenderer", {
             base: Renderer,
             create: function() {
-                return new kity.Group().setId(utils.uuid("node_text"));
+                var group = new kity.Group().setId(utils.uuid("node_text"));
+                // group.on("click",function(){
+                //     alert(112);
+                // })
+                
+                return group;
             },
             update: function(textGroup, node) {
                 function getDataOrStyle(name) {
@@ -7277,6 +7282,21 @@ _p[60] = {
                         textShape.fixPosition();
                     }
                 }
+                if(node.getData("fwflag")){
+                    var newtextShape = new kity.Text("请求服务").setAttr("text-rendering", "inherit");
+                    newtextShape.fill('red').setVerticalAlign("top").setAttr("style", "text-decoration:underline;cursor:pointer");
+                    newtextShape.setY(height+yStart+6);
+                    newtextShape.fixPosition();
+                    newtextShape.on("mouseup", function(e) {
+                        // e.stopPropagation();
+                        // e.preventDefault();
+                        qqfw(this,node,minder);
+                        node.render();
+                        minder.layout();
+                    });
+                    textGroup.addItem(newtextShape);
+                    
+                }
                 this.setTextStyle(node, textGroup);
                 var textHash = node.getText() + [ "font-size", "font-name", "font-weight", "font-style" ].map(getDataOrStyle).join("/");
                 if (node._currentTextHash == textHash && node._currentTextGroupBox) return node._currentTextGroupBox;
@@ -7299,7 +7319,7 @@ _p[60] = {
                     hook(node, text);
                 });
             }
-        });
+        });        
         var TextCommand = kity.createClass({
             base: Command,
             execute: function(minder, text) {
@@ -8075,10 +8095,11 @@ _p[65] = {
                     var imageUrl = nodeData.image;
                     var imageSize = nodeData.imageSize;
                     var imageRenderBox = allNodes[i].getRenderBox("ImageRenderer", minder.getRenderContainer());
+                    var nodeW = nodeData.imageWidth ? nodeData.imageWidth : 20;
                     var imageInfo = {
                         url: imageUrl,
-                        width: 20,
-                        height: 20,
+                        width: nodeW,
+                        height: nodeW,
                         x: -renderContainer.getBoundaryBox().x + imageRenderBox.x + 20,
                         y: -renderContainer.getBoundaryBox().y + imageRenderBox.y + 20
                     };
