@@ -900,7 +900,11 @@ div a.theme-item {
   display: block;
 }
 .btn-label {
+  color: #333;
   font-size: 12px;
+  text-align: center;
+  width: 100%;
+  display: block;
 }
 .btn-wrap {
   width: 50px;
@@ -1237,6 +1241,8 @@ div a.theme-item {
 .btn-group-vertical .expand-caption {
   height: 20px;
 }
+
+
 .btn-group-vertical .expand-caption .caption {
   font-size: 12px;
 }
@@ -1312,107 +1318,39 @@ div a.theme-item {
   font-size: 12px;
 }
 /*新增分析，导出图片，到处数据*/
-.btn-group-vertical .analysis,
-.btn-group-vertical .analysis-caption {
-  width: 40px;
-  margin: 0;
-  padding: 0;
-  border: none!important;
-  border-radius: 0!important;
-}
-.btn-group-vertical .analysis:hover,
-.btn-group-vertical .analysis-caption:hover {
-  background-color: #eff3fa;
-}
-.btn-group-vertical .analysis:active,
-.btn-group-vertical .analysis-caption:active {
-  background-color: #c4d0ee;
-}
-.btn-group-vertical .analysis.active,
-.btn-group-vertical .analysis-caption.active {
-  box-shadow: none;
-  background-color: #eff3fa;
-}
-.btn-group-vertical .analysis {
+
+.analysis {
   height: 25px;
   background: url(images/icons.png) no-repeat 0 -1285px;
   background-position-x: 50%;
 }
-.btn-group-vertical .analysis-caption {
-  height: 20px;
-}
-.btn-group-vertical .analysis-caption .caption {
-  font-size: 12px;
-}
-
-.btn-group-vertical .exportimg,
-.btn-group-vertical .exportimg-caption {
-  width: 70px;
-  margin: 0;
-  padding: 0;
-  border: none!important;
-  border-radius: 0!important;
-}
-.btn-group-vertical .exportimg:hover,
-.btn-group-vertical .exportimg-caption:hover {
-  background-color: #eff3fa;
-}
-.btn-group-vertical .analysis:active,
-.btn-group-vertical .analysis-caption:active {
-  background-color: #c4d0ee;
-}
-.btn-group-vertical .exportimg.active,
-.btn-group-vertical .exportimg-caption.active {
-  box-shadow: none;
-  background-color: #eff3fa;
-}
-.btn-group-vertical .exportimg {
+.exportimg {
   height: 25px;
   background: url(images/icons.png) no-repeat 0 -1315px;
   background-position-x: 50%;
 }
-.btn-group-vertical .exportimg-caption {
-  height: 20px;
-}
-.btn-group-vertical .exportimg-caption .caption {
-  font-size: 12px;
-}
 
-.btn-group-vertical .exportdata,
-.btn-group-vertical .exportdata-caption {
-  width: 70px;
-  margin: 0;
-  padding: 0;
-  border: none!important;
-  border-radius: 0!important;
+.analysiszt{
+  height: 25px;
+  background: url(images/ztfx.png) no-repeat;
+  background-position-x: 50%;
 }
-.btn-group-vertical .exportdata:hover,
-.btn-group-vertical .exportdata-caption:hover {
-  background-color: #eff3fa;
-}
-.btn-group-vertical .exportdata:active,
-.btn-group-vertical .exportdata-caption:active {
-  background-color: #c4d0ee;
-}
-.btn-group-vertical .exportdata.active,
-.btn-group-vertical .exportdata-caption.active {
-  box-shadow: none;
-  background-color: #eff3fa;
-}
-.btn-group-vertical .exportdata {
+.exportdata {
   height: 25px;
   background: url(images/icons.png) no-repeat 0 -1351px;
   background-position-x: 50%;
 }
-.btn-group-vertical .exportdata-caption {
-  height: 20px;
+
+
+.btn-group-vertical .expand-caption.his_img {
+  height: 45px;
+  width: 60px;
 }
-.btn-group-vertical .analysis-caption .caption {
-  font-size: 12px;
+.historyimg{
+  height: 25px;
+  background: url(images/icons.png) no-repeat 0 -1380px;
+  background-position-x: 50%;
 }
-
-
-
 
 .search-box {
   float: right;
@@ -1602,7 +1540,16 @@ div a.theme-item {
 #modal{display: none; padding-left: 6px;left: 102%; width: 80%;min-width: 600px; height: 227px; background: #9fbddf; position: absolute;bottom:45px;right:0;z-index: 999;border-radius: 5px 0 0 5px;}
 #modal .modal_btn{ position: absolute;left: -25px;top: 50%;margin-top: -20px; width: 27px; height: 40px;background: #9fbddf;border: 0;outline: 0;border-radius: 5px 0 0 5px;color: #fff;font-family: '宋体';font-size: 22px;font-weight: bold;}
 #modal .modal_btn:after{content: '';}
-#modal .modal_title{height: 35px; line-height: 35px;color: #fff;font-weight: bold;padding-left: 10px;}
+#modal .modal_title{height: 35px; line-height: 35px;color: #fff;font-weight: bold;margin-left: 20px;overflow: hidden;position: relative;}
+#modal .left_btn,#modal .right_btn{display: none;z-index: 999; position: absolute; width: 20px;height: 35px;line-height: 35px; text-align: center;cursor: pointer;color: #fff;background: #9fbddf;}
+#modal .left_btn:hover,#modal .right_btn:hover{color: red;background: #ccc;}
+#modal .left_btn{left: 6px;top: 0;}
+#modal .right_btn{right: 0px;top: 0;}
+#modal .modal_title .title_box{width: 2000px; left:0;position: relative;}
+
+#modal .modal_title .tab{float: left;padding-left: 10px;padding-right: 10px;border-right: 1px solid #fff;cursor: pointer;}
+#modal .modal_title .tab:last-child{border-right:0; }
+#modal .modal_title .tab:hover,#modal .modal_title .tab.cur{background: #eee;color: #333;}
 #modal .modal_box{ width: 100%;height: 185px;background: #fff;overflow-y:auto; }
 #modal .modal_box table th,#modal .modal_box table td{text-align: center;}
 .fixed-table-container{border-radius: 0;}

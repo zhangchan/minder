@@ -876,7 +876,7 @@ _p[12] = {
                         fsm.jump("normal", "input-commit");
                     }
                 });
-                minder.on("click", function() {
+                minder.on("dblclick", function() {
                     if (minder.getSelectedNode()) {
                         modalShow();
                     }
@@ -901,7 +901,7 @@ _p[12] = {
             function modalShow(){
                 var node = minder.getSelectedNode();
                 var id = node.getData('id');
-                listTable(id,node);
+                listTable(id);
             }
             // let the receiver follow the current selected node position
             function setupReciverElement() {
@@ -1869,12 +1869,17 @@ angular.module('kityminderEditor', [
 angular.module('kityminderEditor').run(['$templateCache', function($templateCache) {
   'use strict';
 
+
   $templateCache.put('ui/directive/colorPanel/colorPanel.html',
     "<div class=\"bg-color-wrap\"><span class=\"quick-bg-color\" ng-click=\"minder.queryCommandState('background') === -1 || minder.execCommand('background', bgColor)\" ng-disabled=\"minder.queryCommandState('background') === -1\"></span> <span color-picker class=\"bg-color\" set-color=\"setDefaultBg()\" ng-disabled=\"minder.queryCommandState('background') === -1\"><span class=\"caret\"></span></span> <span class=\"bg-color-preview\" ng-style=\"{ 'background-color': bgColor }\" ng-click=\"minder.queryCommandState('background') === -1 || minder.execCommand('background', bgColor)\" ng-disabled=\"minder.queryCommandState('background') === -1\"></span></div>"
   );
 
   $templateCache.put('ui/directive/expandLevel/expandLevel.html',
     "<div class=\"btn-group-vertical\" dropdown is-open=\"isopen\"><button type=\"button\" class=\"btn btn-default expand\" title=\"{{ 'expandtoleaf' | lang:'ui' }}\" ng-class=\"{'active': isopen}\" ng-click=\"minder.execCommand('ExpandToLevel', 9999)\"></button> <button type=\"button\" class=\"btn btn-default expand-caption dropdown-toggle\" title=\"{{ 'expandtoleaf' | lang:'ui' }}\" dropdown-toggle><span class=\"caption\">{{ 'expandtoleaf' | lang:'ui' }}</span> <span class=\"caret\"></span> <span class=\"sr-only\">{{ 'expandtoleaf' | lang:'ui' }}</span></button><ul class=\"dropdown-menu\" role=\"menu\"><li ng-repeat=\"level in levels\"><a href ng-click=\"minder.execCommand('ExpandToLevel', level)\">{{ 'expandtolevel' + level | lang:'ui/command' }}</a></li></ul></div>"
+  );
+
+  $templateCache.put('ui/directive/historySelect/historySelect.html',
+    "<div class=\"btn-group-vertical historyMap\" dropdown is-open=\"isopen\"><button ng-click=\"historyBtn($event)\" type=\"button\" class=\"btn btn-default expand-caption his_img dropdown-toggle\" title=\"{{ 'historyimg' | lang:'ui' }}\" dropdown-toggle><span class=\"btn-icon reset-layout-icon historyimg\"></span><span class=\"caption\">{{ 'historyimg' | lang:'ui' }}</span><span class=\"caret\"></span> <span class=\"sr-only\">{{ 'historyimg' | lang:'ui' }}</span></button><ul class=\"dropdown-menu\" role=\"menu\"><li ng-repeat=\"level in levels\"><a href ng-click=\"showHistory($event)\">{{level}}</a></li></ul></div>"
   );
 
   $templateCache.put('ui/directive/kityminderEditor/kityminderEditor.html',
@@ -1916,17 +1921,24 @@ angular.module('kityminderEditor').run(['$templateCache', function($templateCach
   $templateCache.put('ui/directive/searchBtn/searchBtn.html',
     "<div class=\"btn-group-vertical\" dropdown is-open=\"isopen\"><button type=\"button\" class=\"btn btn-default search\" title=\"{{ 'search' | lang:'ui' }}\" ng-class=\"{'active': isopen}\" ng-click=\"enterSearch()\"></button> <button type=\"button\" class=\"btn btn-default search-caption dropdown-toggle\" ng-click=\"enterSearch()\" title=\"{{ 'search' | lang:'ui' }}\"><span class=\"caption\">{{ 'search' | lang:'ui' }}</span> <span class=\"sr-only\">{{ 'search' | lang:'ui' }}</span></button></div>"
   );
-
+    //改动点儿
   $templateCache.put('ui/directive/analysisBtn/analysisBtn.html',
-    "<div class=\"btn-group-vertical\" dropdown is-open=\"isopen\"><button type=\"button\" class=\"btn btn-default analysis\" title=\"{{ 'analysis' | lang:'ui' }}\" ng-class=\"{'active': isopen}\" ng-click=\"analysis()\"></button> <button type=\"button\" class=\"btn btn-default analysis-caption dropdown-toggle\" ng-click=\"analysis()\" title=\"{{ 'analysis' | lang:'ui' }}\"><span class=\"caption\">{{ 'analysis' | lang:'ui' }}</span> <span class=\"sr-only\">{{ 'analysis' | lang:'ui' }}</span></button></div>"
+      "<div class=\"readjust-layout\"><a ng-click=\"analysis()\" class=\"btn-wrap\" ><span class=\"btn-icon reset-layout-icon  analysis\"></span> <span class=\"btn-label\">{{ 'analysis' | lang: 'ui' }}</span></a></div>"
   );
 
+    //改动点儿
   $templateCache.put('ui/directive/exportimgBtn/exportimgBtn.html',
-    "<div class=\"btn-group-vertical\" dropdown is-open=\"isopen\"><button type=\"button\" class=\"btn btn-default exportimg\" title=\"{{ 'exportimg' | lang:'ui' }}\" ng-class=\"{'active': isopen}\" ng-click=\"exportImg()\"></button> <button type=\"button\" class=\"btn btn-default exportimg-caption dropdown-toggle\" ng-click=\"exportImg()\" title=\"{{ 'exportimg' | lang:'ui' }}\"><span class=\"caption\">{{ 'exportimg' | lang:'ui' }}</span> <span class=\"sr-only\">{{ 'exportimg' | lang:'ui' }}</span></button></div>"
+    "<div class=\"readjust-layout\" dropdown is-open=\"isopen\" ng-class=\"{'active': isopen}\" ng-click=\"exportImg()\"><a class=\"btn-wrap\" ><span class=\"btn-icon reset-layout-icon exportimgs\"></span> <span class=\"btn-label\">{{ 'exportimg' | lang:'ui' }}</span></a></div>"
+
+    );
+
+    //改动点儿
+  $templateCache.put('ui/directive/exportdataBtn/exportdataBtn.html',
+      "<div class=\"readjust-layout\" ng-class=\"{'active': isopen}\" ng-click=\"exportData()\"><a  class=\"btn-wrap\" ><span class=\"btn-icon reset-layout-icon exportdata\"></span> <span class=\"btn-label\">{{ 'exportdata' | lang: 'ui' }}</span></a></div>"
   );
 
-  $templateCache.put('ui/directive/exportdataBtn/exportdataBtn.html',
-    "<div class=\"btn-group-vertical\" dropdown is-open=\"isopen\"><button type=\"button\" class=\"btn btn-default exportdata\" title=\"{{ 'exportdata' | lang:'ui' }}\" ng-class=\"{'active': isopen}\" ng-click=\"exportData()\"></button> <button type=\"button\" class=\"btn btn-default exportdata-caption dropdown-toggle\" ng-click=\"exportData()\" title=\"{{ 'exportdata' | lang:'ui' }}\"><span class=\"caption\">{{ 'exportdata' | lang:'ui' }}</span> <span class=\"sr-only\">{{ 'exportdata' | lang:'ui' }}</span></button></div>"
+  $templateCache.put('ui/directive/analysisztBtn/analysisztBtn.html',
+      "<div class=\"readjust-layout\" ng-class=\"{'active': isopen}\" ng-click=\"analysiszt()\"><a  class=\"btn-wrap\" ><span class=\"btn-icon reset-layout-icon analysiszt\"></span> <span class=\"btn-label\">{{ 'analysiszt' | lang: 'ui' }}</span></a></div>"
   );
 
   $templateCache.put('ui/directive/selectAll/selectAll.html',
@@ -1937,17 +1949,14 @@ angular.module('kityminderEditor').run(['$templateCache', function($templateCach
     "<div class=\"dropdown temp-panel\" dropdown on-toggle=\"toggled(open)\"><div class=\"dropdown-toggle current-temp-item\" ng-disabled=\"minder.queryCommandState('template') === -1\" dropdown-toggle><a href class=\"temp-item {{ minder.queryCommandValue('template') }}\" title=\"{{ minder.queryCommandValue('template') | lang: 'template' }}\"></a> <span class=\"caret\"></span></div><ul class=\"dropdown-menu temp-list\"><li ng-repeat=\"(key, templateObj) in templateList\" class=\"temp-item-wrap\"><a ng-click=\"minder.execCommand('template', key);\" class=\"temp-item {{key}}\" ng-class=\"{ 'temp-item-selected' : key == minder.queryCommandValue('template') }\" title=\"{{ key | lang: 'template' }}\"></a></li></ul></div>"
   );
 
-
   $templateCache.put('ui/directive/themeList/themeList.html',
     "<div class=\"dropdown theme-panel\" dropdown><div class=\"dropdown-toggle theme-item-selected\" dropdown-toggle ng-disabled=\"minder.queryCommandState('theme') === -1\"><a href class=\"theme-item\" ng-style=\"getThemeThumbStyle(minder.queryCommandValue('theme'))\" title=\"{{ minder.queryCommandValue('theme') | lang: 'theme'; }}\">{{ minder.queryCommandValue('theme') | lang: 'theme'; }}</a> <span class=\"caret\"></span></div><ul class=\"dropdown-menu theme-list\"><li ng-repeat=\"key in themeKeyList\" class=\"theme-item-wrap\"><a ng-click=\"minder.execCommand('theme', key);\" class=\"theme-item\" ng-style=\"getThemeThumbStyle(key)\" title=\"{{ key | lang: 'theme'; }}\">{{ key | lang: 'theme'; }}</a></li></ul></div>"
   );
 
 
   $templateCache.put('ui/directive/topTab/topTab.html',
-    "<template-list minder=\"minder\" class=\"inline-directive\"></template-list><theme-list minder=\"minder\"></theme-list><layout minder=\"minder\" class=\"inline-directive\"></layout><expand-level minder=\"minder\"></expand-level><select-all minder=\"minder\"></select-all><search-btn minder=\"minder\"></search-btn><analysis-btn minder=\"minder\" ></analysis-btn><exportimg-btn minder=\"minder\" ></exportimg-btn><exportdata-btn minder=\"minder\" ></exportdata-btn>"
+    "<template-list minder=\"minder\" class=\"inline-directive\"></template-list><theme-list minder=\"minder\"></theme-list><layout minder=\"minder\" class=\"inline-directive\"></layout><expand-level minder=\"minder\"></expand-level><select-all minder=\"minder\"></select-all><history-select minder=\"minder\"></history-select><search-btn minder=\"minder\"></search-btn><analysis-btn minder=\"minder\" ></analysis-btn><exportimg-btn minder=\"minder\" ></exportimg-btn><exportdata-btn minder=\"minder\" ></exportdata-btn><analysiszt-btn minder=\"minder\" ></analysiszt-btn>"
   );
-
- 
 
 
 }]);
@@ -2210,13 +2219,14 @@ angular.module('kityminderEditor')
 						'fullscreen': '全屏',
 						'outline': '大纲'
 					},
-
+                    'ztfx':'专题分析',//改动点：新增ztfx变量
 					'search':'搜索',
-                    "analysis" : '分析',
-                    "exportimg" : '导出图片',
-                    "exportdata" : '导出数据',
-
-					'expandtoleaf': '展开',
+                    'analysis' : '分析',
+                    'exportimg' : '导出图片',
+                    'exportdata' : '导出数据',
+                    'analysiszt' : '专题分析',
+                    'expandtoleaf': '展开',
+					'historyimg': '历史图形',
 
 					'back': '返回',
 
@@ -2813,6 +2823,49 @@ angular.module('kityminderEditor')
             link: function($scope) {
 
                 $scope.levels = [1, 2, 3, 4, 5, 6];
+
+            }
+        }
+    });
+angular.module('kityminderEditor')
+    .directive('historySelect', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'ui/directive/historySelect/historySelect.html',
+            scope: {
+                minder: '='
+            },
+            replace: true,
+            link: function($scope) {
+
+                $scope.levels = [];
+
+                $scope.historyBtn = function($event){
+                    $event.preventDefault()
+                    $event.stopPropagation();
+                    console.log($event)
+                    $(".historyMap").removeClass('open');
+                    if($(".historyMap").find('button').attr("aria-expanded") == "false"){
+                        $(".historyMap").removeClass('open');
+                        setTimeout(function(){
+                            var levels = ["sasasa", "历史图2", "历史图3", "历史图4"];
+                            resetLi(levels);
+                            // $(".historyMap").addClass('open');
+                        },500)
+                    }
+                }
+                function resetLi(eles){
+                    var html = '';
+                    for (var i = 0; i < eles.length; i++) {
+                        html +='<li ng-repeat="level in levels" class="ng-scope"><a ng-click="showHistory($event)" class="ng-binding">'+eles[i]+'</a></li>'
+                    }
+                    $(".historyMap").find('.dropdown-menu').html(html);
+                }
+                $scope.showHistory = function($event){
+                     $event.preventDefault()
+                    $event.stopPropagation();
+                    loadHistory($scope.levels[this.$index])
+                }
             }
         }
     });
@@ -2935,6 +2988,7 @@ angular.module('kityminderEditor')
 			}
 		}
 	});
+
 /**
  * @fileOverview
  *
@@ -3464,6 +3518,25 @@ angular.module('kityminderEditor')
                     // var img = source.toDataURL("image/png")
                     // window.location.href=ful;
                     console.log(minder.exportJson());
+                    minder.fire('receiverfocus');
+                }
+            }
+        }
+    });
+angular.module('kityminderEditor')
+    .directive('analysisztBtn', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'ui/directive/analysisztBtn/analysisztBtn.html',
+            scope: {
+                minder: '='
+            },
+            replace: true,
+            link: function ($scope) {
+                $scope.analysiszt = analysiszt;
+                function analysiszt() {
+                    var selected = minder.getSelectedNode();
+                    alert(selected);
                     minder.fire('receiverfocus');
                 }
             }
